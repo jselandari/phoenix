@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0F3D54" />
+<meta name="description" content="Calculadora del Escore de Phoenix para sepsis y shock séptico pediátrico" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Escore de Phoenix" />
+<title>Escore de Phoenix</title>
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="icons/icon-192.png" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="app-header">
+  <span class="brand-mark" aria-hidden="true">
+    <svg viewBox="0 0 48 48" width="38" height="38">
+      <defs>
+        <linearGradient id="markGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#217491" />
+          <stop offset="1" stop-color="#0F3D54" />
+        </linearGradient>
+      </defs>
+      <rect x="1" y="1" width="46" height="46" rx="12" fill="url(#markGrad)" />
+      <path d="M8 30h6.6l2.3-6 3.2 12 3-8.6 2.1 4.6h14.8" fill="none" stroke="#81C7C5" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </span>
+  <div class="brand-text">
+    <p class="eyebrow">Sepsis pediátrica &middot; UCIP</p>
+    <h1>Escore de Phoenix</h1>
+    <p class="lede">Complete cada variable con el hallazgo más reciente del paciente.</p>
+  </div>
+</header>
+
+<main class="layout">
+  <form id="phoenix-form" class="form-column">
+
+    <!-- RESPIRATORIO -->
+    <section class="system" data-system="resp">
+      <h2><span class="system-name">Respiratorio</span><span class="system-max">máx. 3 puntos</span></h2>
+
+      <fieldset class="variable" data-var="pafi">
+        <legend>PaO<sub>2</sub>/FiO<sub>2</sub>, SpO<sub>2</sub>/FiO<sub>2</sub></legend>
+        <label class="option"><input type="radio" name="pafi" value="0"><span>PaO<sub>2</sub>/FiO<sub>2</sub> ≥400 o SpO<sub>2</sub>/FiO<sub>2</sub> ≥292</span></label>
+        <label class="option"><input type="radio" name="pafi" value="1"><span>PaO<sub>2</sub>/FiO<sub>2</sub> &lt;400 en cualquier soporte respiratorio, o SpO<sub>2</sub>/FiO<sub>2</sub> &lt;292 en cualquier soporte respiratorio</span></label>
+        <label class="option"><input type="radio" name="pafi" value="2"><span>PaO<sub>2</sub>/FiO<sub>2</sub> 100–200 en VMI, o SpO<sub>2</sub>/FiO<sub>2</sub> 148–220 en VMI</span></label>
+        <label class="option"><input type="radio" name="pafi" value="3"><span>PaO<sub>2</sub>/FiO<sub>2</sub> &lt;100 en VMI, o SpO<sub>2</sub>/FiO<sub>2</sub> &lt;148 en VMI</span></label>
+      </fieldset>
+    </section>
+
+    <!-- CARDIOVASCULAR -->
+    <section class="system" data-system="cardio">
+      <h2><span class="system-name">Cardiovascular</span><span class="system-max">máx. 6 puntos</span></h2>
+
+      <fieldset class="variable" data-var="drogas">
+        <legend>Medicamentos vasoactivos</legend>
+        <label class="option"><input type="radio" name="drogas" value="0"><span>Ninguno</span></label>
+        <label class="option"><input type="radio" name="drogas" value="1"><span>1 medicamento</span></label>
+        <label class="option"><input type="radio" name="drogas" value="2"><span>≥2 medicamentos</span></label>
+      </fieldset>
+
+      <fieldset class="variable" data-var="lactico">
+        <legend>Lactato</legend>
+        <label class="option"><input type="radio" name="lactico" value="0"><span>&lt;5 mmol/L</span></label>
+        <label class="option"><input type="radio" name="lactico" value="1"><span>5–10,9 mmol/L</span></label>
+        <label class="option"><input type="radio" name="lactico" value="2"><span>&gt;10,9 mmol/L</span></label>
+      </fieldset>
+
+      <fieldset class="variable tam-variable" data-var="tam">
+        <legend>TAM (tensión arterial media)</legend>
+        <div class="tam-inputs">
+          <label class="field">
+            <span>Edad</span>
+            <select id="tam-edad">
+              <option value="" disabled selected>Seleccionar…</option>
+              <option value="30|17">&lt;1 mes</option>
+              <option value="38|25">1 a 11 meses</option>
+              <option value="43|31">1 a &lt;2 años</option>
+              <option value="44|32">2 a &lt;5 años</option>
+              <option value="48|36">5 a &lt;12 años</option>
+              <option value="51|38">12 a 17 años</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>TAM medida (mmHg)</span>
+            <input type="number" id="tam-valor" inputmode="decimal" step="0.1" placeholder="ej. 40" />
+          </label>
+        </div>
+        <p class="tam-hint" id="tam-hint">Seleccione la edad e ingrese la TAM para calcular los puntos.</p>
+      </fieldset>
+    </section>
+
+    <!-- COAGULACIÓN -->
+    <section class="system" data-system="coagu">
+      <h2><span class="system-name">Coagulación</span><span class="system-max">máx. 2 puntos</span></h2>
+
+      <fieldset class="variable" data-var="plaquetas">
+        <legend>Plaquetas</legend>
+        <label class="option"><input type="radio" name="plaquetas" value="0"><span>≥100.000 μL</span></label>
+        <label class="option"><input type="radio" name="plaquetas" value="1"><span>&lt;100.000 μL</span></label>
+      </fieldset>
+
+      <fieldset class="variable" data-var="rin">
+        <legend>RIN</legend>
+        <label class="option"><input type="radio" name="rin" value="0"><span>≤1,3</span></label>
+        <label class="option"><input type="radio" name="rin" value="1"><span>&gt;1,3</span></label>
+      </fieldset>
+
+      <fieldset class="variable" data-var="dimero">
+        <legend>Dímero-D</legend>
+        <label class="option"><input type="radio" name="dimero" value="0"><span>≤2 μg/mL</span></label>
+        <label class="option"><input type="radio" name="dimero" value="1"><span>&gt;2 μg/mL</span></label>
+      </fieldset>
+
+      <fieldset class="variable" data-var="fibrinogeno">
+        <legend>Fibrinógeno</legend>
+        <label class="option"><input type="radio" name="fibrinogeno" value="0"><span>≥100 mg/dL</span></label>
+        <label class="option"><input type="radio" name="fibrinogeno" value="1"><span>&lt;100 mg/dL</span></label>
+      </fieldset>
+    </section>
+
+    <!-- NEUROLÓGICO -->
+    <section class="system" data-system="neuro">
+      <h2><span class="system-name">Neurológico</span><span class="system-max">máx. 2 puntos</span></h2>
+
+      <fieldset class="variable" data-var="glasgow">
+        <legend>Escala de Glasgow</legend>
+        <label class="option"><input type="radio" name="glasgow" value="0"><span>&gt;10, pupilas reactivas</span></label>
+        <label class="option"><input type="radio" name="glasgow" value="1"><span>≤10</span></label>
+        <label class="option"><input type="radio" name="glasgow" value="2"><span>Pupilas fijas bilateralmente</span></label>
+      </fieldset>
+    </section>
+
+    <button type="button" id="reset-btn" class="reset-btn">Reiniciar formulario</button>
+  </form>
+
+  <aside class="summary-panel" id="summary-panel">
+    <div class="summary-inner">
+      <div class="summary-top">
+        <p class="summary-label">Escore de Phoenix total</p>
+        <p class="summary-missing" id="summary-missing">Faltan completar campos</p>
+      </div>
+      <p class="summary-total" id="summary-total">–</p>
+
+      <div class="summary-breakdown">
+        <div><span>Respiratorio</span><strong id="sub-resp">–</strong></div>
+        <div><span>Cardiovascular</span><strong id="sub-cardio">–</strong></div>
+        <div><span>Coagulación</span><strong id="sub-coagu">–</strong></div>
+        <div><span>Neurológico</span><strong id="sub-neuro">–</strong></div>
+      </div>
+
+      <p class="summary-interpretation" id="summary-interpretation" data-state="pending">
+        Complete todos los campos
+      </p>
+    </div>
+  </aside>
+</main>
+
+<footer class="app-footer">
+  <p>Herramienta de apoyo clínico. No sustituye el juicio clínico. Basada en los criterios del Phoenix Sepsis Score (Sanchez-Pinto et al., JAMA 2024).</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
